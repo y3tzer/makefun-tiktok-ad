@@ -22,6 +22,7 @@ function whyRefused(url: string): string {
   return 'it is not a TikTok video address';
 }
 
+// Throws unless the file names a full TikTok video address. Success prints nothing, as the run contract asks.
 function videoAddress(file: string): string {
   const parsed: unknown = JSON.parse(readFileSync(file, 'utf8'));
   const url = (parsed as { url?: unknown } | null)?.url;
@@ -33,10 +34,9 @@ function videoAddress(file: string): string {
 }
 
 try {
-  const url = videoAddress(SOURCE);
+  videoAddress(SOURCE);
   mkdirSync(OUTPUT_DIR, { recursive: true });
   copyFileSync(SOURCE, join(OUTPUT_DIR, 'VIDEO.json'));
-  console.log(`VIDEO.json handed in: ${url}`);
 } catch (err) {
   console.error(`VIDEO.json could not be handed in from ${BOT_DIR}: ${(err as Error).message}`);
   process.exit(1);
